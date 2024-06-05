@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "809038903614",
+    "project_id": "mushaeera",
+    "storage_bucket": "mushaeera.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:809038903614:android:1e27061cb5ea60e260146f",
+        "android_client_info": {
+          "package_name": "com.arrijal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM6kAznsBAhHQDJNcs6RHswRyPwfmtqcg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
