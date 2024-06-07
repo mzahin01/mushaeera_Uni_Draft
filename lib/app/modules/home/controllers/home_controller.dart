@@ -2,21 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mushaira/app/modules/home/model/model.dart';
 
 class FirestoreServices {
-  static saveUser(String name, email, uid) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .set({'email': email, 'name': name});
-  }
+  static saveUser(String name, email, uid) async {}
 }
 
 class HomeController extends GetxController {
+  Rx<UserData?> userData = Rx(null);
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController nameController = TextEditingController();
-
   TextEditingController logemailController = TextEditingController();
   TextEditingController logpassController = TextEditingController();
 
@@ -52,10 +48,14 @@ class HomeController extends GetxController {
     )
         .then(
       (UserCredential cred) {
-        FirestoreServices.saveUser(
-          nameController.text,
-          emailController.text,
-          cred.user?.uid,
+        userData.value = UserData(
+          name: nameController.text,
+          email: emailController.text,
+          role: 'User',
+          favouritePoemsIds: null,
+        );
+        saveUser(
+          cred.user!.uid,
         );
         Get.back();
       },
@@ -81,5 +81,11 @@ class HomeController extends GetxController {
     } catch (e) {
       Get.snackbar('WEAK!', e.toString());
     }
+  }
+
+  Future<void> saveUser(String uid) async {
+    await FirebaseFirestore.instance.collection('users').doc(uid).set(
+          userData.value?.toJson() ?? {},
+        );
   }
 }
