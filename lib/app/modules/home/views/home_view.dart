@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mushaira/app/modules/home/modals_reg_log/modal.dart';
 import '../controllers/home_controller.dart';
+import '../widgets/drawer.dart';
 import '../widgets/widget_base.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -53,9 +53,9 @@ class HomeView extends GetView<HomeController> {
                 iconman: Icons.line_style,
               ),
               const Module(
-                widgName: 'Classroom',
-                wayString: '/home',
-                iconman: Icons.menu_book,
+                widgName: 'Editor',
+                wayString: '/editor-page',
+                iconman: Icons.edit,
               ),
               Expanded(
                 child: SizedBox(
@@ -103,64 +103,5 @@ class HomeView extends GetView<HomeController> {
         ),
       );
     });
-  }
-}
-
-class DrawerMade extends StatelessWidget {
-  const DrawerMade({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        const DrawerHeader(
-          decoration: BoxDecoration(
-            color: Colors.blue,
-          ),
-          child: Text(
-            'Drawer Header',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-            ),
-          ),
-        ),
-        ListTile(
-          leading: const Icon(Icons.home),
-          title: const Text('Home'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.settings),
-          title: const Text('Settings'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.contacts),
-          title: const Text('Contacts'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        const Expanded(
-            child: SizedBox(
-          height: 10,
-        )),
-        ElevatedButton(
-          onPressed: () {
-            FirebaseAuth.instance.signOut();
-            Navigator.pop(context);
-          },
-          child: const Icon(Icons.logout),
-        )
-      ],
-    );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mushaira/app/modules/home/model/model.dart';
+import 'package:mushaira/app/modules/home/model/userdata_model.dart';
 
 class FirestoreServices {
   static saveUser(String name, email, uid) async {}
