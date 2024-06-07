@@ -1,23 +1,6 @@
 import 'package:get/get.dart';
+import 'package:mushaira/app/modules/home/model/poem_model.dart';
 
 class EditorPageController extends GetxController {
-  //TODO: Implement EditorPageController
-
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
+  Rx<Poem?> poem = Rx(null);
 }

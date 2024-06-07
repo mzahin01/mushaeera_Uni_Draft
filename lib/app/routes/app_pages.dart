@@ -20,7 +20,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.EDITOR_PAGE,
-      page: () => const EditorPageView(),
+      page: () => EditorPageView(),
       binding: EditorPageBinding(),
     ),
   ];
