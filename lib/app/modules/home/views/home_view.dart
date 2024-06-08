@@ -49,7 +49,7 @@ class HomeView extends GetView<HomeController> {
               ),
               const Module(
                 widgName: 'Courses',
-                wayString: '/home',
+                wayString: '/poem-view-page',
                 iconman: Icons.line_style,
               ),
               const Module(
