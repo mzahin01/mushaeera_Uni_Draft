@@ -13,6 +13,7 @@ dependencies:
   firebase_core: ^3.0.0
   firebase_auth: ^5.0.0
   cloud_firestore: ^5.0.0
+  rive: ^0.13.7
 
 dev_dependencies: 
   flutter_lints: 4.0.0
@@ -24,4 +25,5 @@ flutter:
 
   assets:
     - Assets/mulogo.png
+    - assets/animation.riv
 

@@ -1,23 +1,42 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mushaira/app/modules/home/model/poem_model.dart';
 
 class EditorPageController extends GetxController {
   Rx<Poem?> poem = Rx(null);
+  Rx<Poem?> poemrc = Rx(null);
+
+  @override
+  void onInit() {
+    super.onInit();
+    poemrc.value = Get.arguments as Poem?;
+    loadPoem();
+  }
+
+  loadPoem() {
+    poemNameController.text =
+        poemrc.value!.poemName!.words!.map((word) => word.local).join(' ');
+    poemNameLatinController.text = poemrc.value!.poemName!.words!
+        .map((word) => word.latinTranslitaration)
+        .join(' ');
+    controller3.text = poemrc.value!.poetName ?? '';
+    controller4.text = poemrc.value!.recitationLinks!.join(' ');
+    controller7.text = poemrc.value!.tags!.join(' ');
+  }
+
   final TextEditingController poemNameController =
-      TextEditingController(text: 'আনন্দলোকে মঙ্গলালোকে');
+      TextEditingController(text: '');
   final TextEditingController poemNameLatinController =
-      TextEditingController(text: 'Anandalöke mangalalöke');
-  final TextEditingController controller3 =
-      TextEditingController(text: 'RabindraNath Tagore');
-  final TextEditingController controller4 =
-      TextEditingController(text: 'eknumber.com duinumber.com');
-  final TextEditingController controller5 = TextEditingController(
-      text:
-          'আনন্দলোকে মঙ্গলালোকে বিরাজ সত্যসুন্দর। মহিমা তব উদ্ভাসিত মহাগগনমাঝে। বিশ্বজগত মণিভূষণ বেষ্টিত চরণে। আনন্দলোকে মঙ্গলালোকে বিরাজ সত্যসুন্দর।।');
-  final TextEditingController controller6 = TextEditingController(
-      text:
-          'Anandalöke mangalalöke biraja satyasundara. Mahima taba udbhasita mahagaganamajhe. Bisbajagata manibhusana bestita carane. Anandalökē mangalälöke birãja satyasundara..');
-  final TextEditingController controller7 =
-      TextEditingController(text: 'top2k Spiritual Awsome');
+      TextEditingController(text: '');
+  final TextEditingController controller3 = TextEditingController(text: '');
+  final TextEditingController controller4 = TextEditingController(text: '');
+  final TextEditingController controller5 = TextEditingController(text: '');
+  final TextEditingController controller6 = TextEditingController(text: '');
+  final TextEditingController controller7 = TextEditingController(text: '');
+  Future<void> gamEndSet() async {
+    await FirebaseFirestore.instance.collection('poems').doc('00001').set(
+          poemrc.value?.toJson() ?? {},
+        );
+  }
 }

@@ -16,7 +16,6 @@ class Poem {
   });
 
   factory Poem.fromRawJson(String str) => Poem.fromJson(json.decode(str));
-
   String toRawJson() => json.encode(toJson());
 
   factory Poem.fromJson(Map<String, dynamic> json) => Poem(

@@ -57,6 +57,13 @@ class EditorPageView extends GetView<EditorPageController> {
               onPressed: () {},
               child: const Text('Submit'),
             ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                controller.gamEndSet();
+              },
+              child: const Text('send to FB'),
+            ),
           ],
         ),
       )),
