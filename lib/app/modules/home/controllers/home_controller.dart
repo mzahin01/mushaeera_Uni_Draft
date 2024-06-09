@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,13 +33,16 @@ class HomeController extends GetxController {
 
   Future<void> getUserName(User? user) async {
     if (user == null) {
+      userData = Rx(null);
       return;
     }
-    final data = await FirebaseFirestore.instance
+    final DocumentSnapshot<Map<String, dynamic>> data = await FirebaseFirestore
+        .instance
         .collection('users')
         .doc(user.uid)
         .get();
-    username.value = data.data()?['name'];
+    final Map<String, dynamic> json = data.data() ?? {};
+    userData.value = UserData.fromJson(json);
   }
 
   void register() {
@@ -68,8 +73,8 @@ class HomeController extends GetxController {
         email: logemailController.text,
         password: logpassController.text,
       );
-      // Get.offAllNamed(Routes.HOME);
-      Get.snackbar('Contugralations!', 'Wellcome');
+
+      Get.back();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         Get.snackbar('WEAK!', 'Password Provided is too weak');

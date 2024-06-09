@@ -52,11 +52,12 @@ class HomeView extends GetView<HomeController> {
                 wayString: '/poem-view-page',
                 iconman: Icons.line_style,
               ),
-              const Module(
-                widgName: 'Editor',
-                wayString: '/editor-page',
-                iconman: Icons.edit,
-              ),
+              if (controller.userData.value?.role == 'User')
+                const Module(
+                  widgName: 'Editor',
+                  wayString: '/editor-page',
+                  iconman: Icons.edit,
+                ),
               Expanded(
                 child: SizedBox(
                   width: Get.width / 25,
@@ -85,7 +86,11 @@ class HomeView extends GetView<HomeController> {
                   },
                   child: const Text('Register Now'),
                 ),
-              ] else
+              ] else ...[
+                Text(
+                  controller.userData.value?.name ?? "",
+                  style: const TextStyle(fontSize: 15),
+                ),
                 GestureDetector(
                   onTap: () {
                     controller.scaffoldKey.currentState?.openEndDrawer();
@@ -95,6 +100,7 @@ class HomeView extends GetView<HomeController> {
                     size: 35,
                   ),
                 ),
+              ],
               SizedBox(
                 width: Get.width / 12.6,
               ),
