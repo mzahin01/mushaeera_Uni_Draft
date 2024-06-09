@@ -35,8 +35,8 @@ class PoemViewPageController extends GetxController {
                 latinTranslitaration: 'biraja',
               ),
               Word(
-                local: 'সত্যসুন্দর।\n',
-                latinTranslitaration: 'satyasundara.\n',
+                local: 'সত্যসুন্দর।',
+                latinTranslitaration: 'satyasundara.',
               ),
             ],
           ),
@@ -55,8 +55,8 @@ class PoemViewPageController extends GetxController {
                 latinTranslitaration: 'udbhasita',
               ),
               Word(
-                local: 'মহাগগনমাঝে।\n',
-                latinTranslitaration: 'mahagaganamajhe.\n',
+                local: 'মহাগগনমাঝে।',
+                latinTranslitaration: 'mahagaganamajhe.',
               ),
             ],
           ),
@@ -75,8 +75,8 @@ class PoemViewPageController extends GetxController {
                 latinTranslitaration: 'bestita',
               ),
               Word(
-                local: 'চরণে।\n',
-                latinTranslitaration: 'carane.\n',
+                local: 'চরণে।',
+                latinTranslitaration: 'carane.',
               ),
             ],
           ),
@@ -95,8 +95,8 @@ class PoemViewPageController extends GetxController {
                 latinTranslitaration: 'birãja',
               ),
               Word(
-                local: 'সত্যসুন্দর।\n',
-                latinTranslitaration: 'satyasundara.\n',
+                local: 'সত্যসুন্দর।',
+                latinTranslitaration: 'satyasundara.',
               )
             ],
           ),
