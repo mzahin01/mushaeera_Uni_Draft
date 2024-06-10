@@ -10,7 +10,7 @@ class PoemViewPageView extends GetView<PoemViewPageController> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.toNamed(Routes.EDITOR_PAGE, arguments: controller.poem.value);
+          Get.toNamed(Routes.EDITOR_PAGE, arguments: controller.poemUID.value);
         },
         child: const Icon(Icons.logout),
       ),

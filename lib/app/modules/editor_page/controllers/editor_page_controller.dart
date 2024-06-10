@@ -5,26 +5,38 @@ import 'package:mushaira/app/modules/home/model/poem_model.dart';
 
 class EditorPageController extends GetxController {
   Rx<Poem?> poem = Rx(null);
-  Rx<Poem?> poemrc = Rx(null);
+  RxString poemUID = ''.obs;
 
   @override
-  void onInit() {
-    super.onInit();
-    poemrc.value = Get.arguments as Poem?;
-    if (poemrc.value != null) {
+  Future<void> onInit() async {
+    poemUID.value = Get.arguments as String;
+    // print(poemUID.value);
+    if (poemUID.value != '') {
+      await fetchPoem();
       loadPoem();
     }
+    super.onInit();
+  }
+
+  Future<void> fetchPoem() async {
+    DocumentSnapshot<Map<String, dynamic>> doc = await FirebaseFirestore
+        .instance
+        .collection('poems')
+        .doc(poemUID.value)
+        .get();
+    Map<String, dynamic>? data = doc.data();
+    poem.value = (Poem.fromJson(data!));
   }
 
   loadPoem() {
     poemNameController.text =
-        poemrc.value!.poemName!.words!.map((word) => word.local).join(' ');
-    poemNameLatinController.text = poemrc.value!.poemName!.words!
+        poem.value!.poemName!.words!.map((word) => word.local).join(' ');
+    poemNameLatinController.text = poem.value!.poemName!.words!
         .map((word) => word.latinTranslitaration)
         .join(' ');
-    controller3.text = poemrc.value!.poetName ?? '';
-    controller4.text = poemrc.value!.recitationLinks!.join(' ');
-    controller7.text = poemrc.value!.tags!.join(' ');
+    controller3.text = poem.value!.poetName ?? '';
+    controller4.text = poem.value!.recitationLinks!.join(' ');
+    controller7.text = poem.value!.tags!.join(' ');
   }
 
   final TextEditingController poemNameController =
@@ -38,15 +50,15 @@ class EditorPageController extends GetxController {
   final TextEditingController controller7 = TextEditingController(text: '');
 
   Future<void> savePoem() async {
-    poemrc.value?.poemName?.words?.first.local = poemNameController.text;
-    poemrc.value?.poemName?.words?.first.latinTranslitaration =
+    poem.value?.poemName?.words?.first.local = poemNameController.text;
+    poem.value?.poemName?.words?.first.latinTranslitaration =
         poemNameLatinController.text;
-    poemrc.value?.poetName = controller3.text;
-    poemrc.value!.recitationLinks = controller4.text.split(' ');
-    poemrc.value!.tags = controller7.text.split(' ');
+    poem.value?.poetName = controller3.text;
+    poem.value!.recitationLinks = controller4.text.split(' ');
+    poem.value!.tags = controller7.text.split(' ');
 
-    await FirebaseFirestore.instance.collection('poems').doc('00002').set(
-          poemrc.value?.toJson() ?? {},
+    await FirebaseFirestore.instance.collection('poems').doc(poemUID.value).set(
+          poem.value?.toJson() ?? {},
         );
   }
 }

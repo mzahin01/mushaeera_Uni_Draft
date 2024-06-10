@@ -6,8 +6,6 @@ import 'package:mushaira/app/modules/home/model/userdata_model.dart';
 import '../model/poem_model.dart';
 
 class HomeController extends GetxController {
-  RxList<Poem?> poem = RxList.empty(growable: true);
-
   Rx<UserData?> userData = Rx(null);
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
@@ -19,6 +17,9 @@ class HomeController extends GetxController {
   Rx<User?> user = Rx(null);
   RxnString username = RxnString();
 
+  RxList<Poem?> poem = RxList.empty(growable: true);
+  RxList<String?> poemUIDs = RxList.empty(growable: true);
+
   @override
   void onInit() {
     fetchPoems();
@@ -28,6 +29,17 @@ class HomeController extends GetxController {
     });
 
     super.onInit();
+  }
+
+  Future<void> fetchPoems() async {
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection('poems').get();
+    poem.clear();
+    for (QueryDocumentSnapshot<Map<String, dynamic>> doc in snapshot.docs) {
+      Map<String, dynamic> data = doc.data();
+      poemUIDs.add(doc.id);
+      poem.add(Poem.fromJson(data));
+    }
   }
 
   Future<void> getUserName(User? user) async {
@@ -90,16 +102,5 @@ class HomeController extends GetxController {
     await FirebaseFirestore.instance.collection('users').doc(uid).set(
           userData.value?.toJson() ?? {},
         );
-  }
-
-  Future<void> fetchPoems() async {
-    QuerySnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance.collection('poems').get();
-
-    poem.clear();
-    for (QueryDocumentSnapshot<Map<String, dynamic>> doc in snapshot.docs) {
-      Map<String, dynamic> data = doc.data();
-      poem.add(Poem.fromJson(data));
-    }
   }
 }
