@@ -46,16 +46,6 @@ class HomeView extends GetView<HomeController> {
                   const SizedBox(
                     width: 15,
                   ),
-                  const Module(
-                    widgName: 'Home',
-                    wayString: '/home',
-                    iconman: Icons.home,
-                  ),
-                  // const Module(
-                  //   widgName: 'Courses',
-                  //   wayString: '/poem-view-page',
-                  //   iconman: Icons.line_style,
-                  // ),
                   if (controller.userData.value?.role == 'Admin')
                     const Module(
                       widgName: 'Editor',
