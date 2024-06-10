@@ -60,7 +60,7 @@ class EditorPageView extends GetView<EditorPageController> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                controller.gamEndSet();
+                controller.savePoem();
               },
               child: const Text('send to FB'),
             ),

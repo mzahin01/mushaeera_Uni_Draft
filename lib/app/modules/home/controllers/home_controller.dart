@@ -3,12 +3,11 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mushaira/app/modules/home/model/userdata_model.dart';
-
-class FirestoreServices {
-  static saveUser(String name, email, uid) async {}
-}
+import '../model/poem_model.dart';
 
 class HomeController extends GetxController {
+  RxList<Poem?> poem = RxList.empty(growable: true);
+
   Rx<UserData?> userData = Rx(null);
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
@@ -22,10 +21,12 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
+    fetchPoems();
     FirebaseAuth.instance.authStateChanges().listen((User? u) {
       user.value = u;
       getUserName(u);
     });
+
     super.onInit();
   }
 
@@ -71,7 +72,6 @@ class HomeController extends GetxController {
         email: logemailController.text,
         password: logpassController.text,
       );
-
       Get.back();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -90,5 +90,16 @@ class HomeController extends GetxController {
     await FirebaseFirestore.instance.collection('users').doc(uid).set(
           userData.value?.toJson() ?? {},
         );
+  }
+
+  Future<void> fetchPoems() async {
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection('poems').get();
+
+    poem.clear();
+    for (QueryDocumentSnapshot<Map<String, dynamic>> doc in snapshot.docs) {
+      Map<String, dynamic> data = doc.data();
+      poem.add(Poem.fromJson(data));
+    }
   }
 }

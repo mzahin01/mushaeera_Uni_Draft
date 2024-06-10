@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:get/get.dart';
 
 import '../modules/editor_page/bindings/editor_page_binding.dart';
@@ -22,7 +24,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.EDITOR_PAGE,
-      page: () => EditorPageView(),
+      page: () => const EditorPageView(),
       binding: EditorPageBinding(),
     ),
     GetPage(

@@ -11,7 +11,9 @@ class EditorPageController extends GetxController {
   void onInit() {
     super.onInit();
     poemrc.value = Get.arguments as Poem?;
-    loadPoem();
+    if (poemrc.value != null) {
+      loadPoem();
+    }
   }
 
   loadPoem() {
@@ -34,8 +36,16 @@ class EditorPageController extends GetxController {
   final TextEditingController controller5 = TextEditingController(text: '');
   final TextEditingController controller6 = TextEditingController(text: '');
   final TextEditingController controller7 = TextEditingController(text: '');
-  Future<void> gamEndSet() async {
-    await FirebaseFirestore.instance.collection('poems').doc('00001').set(
+
+  Future<void> savePoem() async {
+    poemrc.value?.poemName?.words?.first.local = poemNameController.text;
+    poemrc.value?.poemName?.words?.first.latinTranslitaration =
+        poemNameLatinController.text;
+    poemrc.value?.poetName = controller3.text;
+    poemrc.value!.recitationLinks = controller4.text.split(' ');
+    poemrc.value!.tags = controller7.text.split(' ');
+
+    await FirebaseFirestore.instance.collection('poems').doc('00002').set(
           poemrc.value?.toJson() ?? {},
         );
   }
