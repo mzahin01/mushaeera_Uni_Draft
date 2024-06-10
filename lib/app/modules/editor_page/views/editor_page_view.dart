@@ -28,26 +28,26 @@ class EditorPageView extends GetView<EditorPageController> {
               decoration: const InputDecoration(labelText: 'Poem Name latin'),
             ),
             TextField(
-              controller: controller.controller3,
+              controller: controller.poetNameController,
               decoration: const InputDecoration(labelText: 'Poet Name'),
             ),
             TextField(
-              controller: controller.controller4,
+              controller: controller.poemYTlinkController,
               decoration: const InputDecoration(
                   labelText: 'Recitation Links (space separated)'),
             ),
             TextField(
-              controller: controller.controller5,
+              // controller: controller.controller5,
               maxLines: null,
               decoration: const InputDecoration(labelText: 'texts'),
             ),
             TextField(
-              controller: controller.controller6,
+              // controller: controller.controller6,
               maxLines: null,
               decoration: const InputDecoration(labelText: 'texts latin'),
             ),
             TextField(
-              controller: controller.controller7,
+              controller: controller.poemTagsController,
               decoration: const InputDecoration(
                 labelText: 'Texts latin',
               ),

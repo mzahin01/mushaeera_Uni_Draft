@@ -71,7 +71,7 @@ class HomeController extends GetxController {
           favouritePoemsIds: null,
         );
         saveUser(
-          cred.user!.uid,
+          cred.user?.uid,
         );
         Get.back();
       },
@@ -98,7 +98,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> saveUser(String uid) async {
+  Future<void> saveUser(String? uid) async {
     await FirebaseFirestore.instance.collection('users').doc(uid).set(
           userData.value?.toJson() ?? {},
         );

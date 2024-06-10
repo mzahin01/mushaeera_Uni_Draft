@@ -20,7 +20,7 @@ class PoemViewPageController extends GetxController {
         .doc(poemUID.value)
         .get();
     Map<String, dynamic>? data = doc.data();
-    poem.value = (Poem.fromJson(data!));
+    poem.value = (Poem.fromJson(data ?? {}));
   }
 }
 

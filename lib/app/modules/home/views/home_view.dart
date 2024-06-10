@@ -51,12 +51,12 @@ class HomeView extends GetView<HomeController> {
                     wayString: '/home',
                     iconman: Icons.home,
                   ),
-                  const Module(
-                    widgName: 'Courses',
-                    wayString: '/poem-view-page',
-                    iconman: Icons.line_style,
-                  ),
-                  if (controller.userData.value?.role == 'User')
+                  // const Module(
+                  //   widgName: 'Courses',
+                  //   wayString: '/poem-view-page',
+                  //   iconman: Icons.line_style,
+                  // ),
+                  if (controller.userData.value?.role == 'Admin')
                     const Module(
                       widgName: 'Editor',
                       wayString: '/editor-page',
@@ -132,14 +132,15 @@ class HomeView extends GetView<HomeController> {
                         ),
                         child: ListTile(
                           title: Text(
-                            localPoem!.poemName!.words!
-                                .map((word) => word.local)
-                                .join(' '),
+                            localPoem?.poemName?.words
+                                    ?.map((word) => word.local)
+                                    .join(' ') ??
+                                '--',
                             style: const TextStyle(
                                 fontSize: 30, fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(
-                            localPoem.poetName ?? '',
+                            localPoem?.poetName ?? '--',
                           ),
                         ),
                       ),

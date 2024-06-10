@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mushaira/app/routes/app_pages.dart';
+import '../../home/model/poem_model.dart';
 import '../controllers/poem_view_page_controller.dart';
 
 class PoemViewPageView extends GetView<PoemViewPageController> {
@@ -21,7 +22,7 @@ class PoemViewPageView extends GetView<PoemViewPageController> {
         if (controller.poem.value == null) {
           return const Center(child: CircularProgressIndicator());
         } else {
-          final poem = controller.poem.value!;
+          Poem? poem = controller.poem.value;
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -30,29 +31,36 @@ class PoemViewPageView extends GetView<PoemViewPageController> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      poem.poemName!.words!.map((word) => word.local).join(' '),
+                      poem?.poemName?.words
+                              ?.map((word) => word.local)
+                              .join(' ') ??
+                          '--',
                       style: const TextStyle(
                           fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      poem.poetName ?? '',
+                      poem?.poetName ?? '',
                       style: const TextStyle(
                           fontSize: 20, fontStyle: FontStyle.italic),
                     ),
                     const SizedBox(height: 16),
-                    ...poem.texts!.sentences!.map((sentence) {
+                    ...?poem?.texts?.sentences?.map((sentence) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            sentence.words!.map((word) => word.local).join(' '),
+                            sentence.words
+                                    ?.map((word) => word.local)
+                                    .join(' ') ??
+                                '',
                             style: const TextStyle(fontSize: 18),
                           ),
                           Text(
-                            sentence.words!
-                                .map((word) => word.latinTranslitaration)
-                                .join(' '),
+                            sentence.words
+                                    ?.map((word) => word.latinTranslitaration)
+                                    .join(' ') ??
+                                '',
                             style: const TextStyle(
                                 fontSize: 16, color: Colors.black),
                           ),
@@ -66,7 +74,7 @@ class PoemViewPageView extends GetView<PoemViewPageController> {
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    ...poem.recitationLinks!.map((link) {
+                    ...?poem?.recitationLinks?.map((link) {
                       return InkWell(
                         onTap: () {},
                         child: Text(
@@ -86,11 +94,12 @@ class PoemViewPageView extends GetView<PoemViewPageController> {
                     ),
                     Wrap(
                       spacing: 8.0,
-                      children: poem.tags!.map((tag) {
-                        return Chip(
-                          label: Text(tag),
-                        );
-                      }).toList(),
+                      children: poem?.tags?.map((tag) {
+                            return Chip(
+                              label: Text(tag),
+                            );
+                          }).toList() ??
+                          [],
                     ),
                   ],
                 ),

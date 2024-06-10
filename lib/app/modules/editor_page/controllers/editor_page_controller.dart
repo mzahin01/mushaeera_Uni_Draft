@@ -7,15 +7,24 @@ class EditorPageController extends GetxController {
   Rx<Poem?> poem = Rx(null);
   RxString poemUID = ''.obs;
 
+  final TextEditingController poemNameController =
+      TextEditingController(text: '');
+  final TextEditingController poemNameLatinController =
+      TextEditingController(text: '');
+  final TextEditingController poetNameController =
+      TextEditingController(text: '');
+  final TextEditingController poemYTlinkController =
+      TextEditingController(text: '');
+  final TextEditingController poemTagsController =
+      TextEditingController(text: '');
+
   @override
-  Future<void> onInit() async {
-    poemUID.value = Get.arguments as String;
-    // print(poemUID.value);
-    if (poemUID.value != '') {
-      await fetchPoem();
-      loadPoem();
-    }
+  void onInit() {
     super.onInit();
+    poemUID.value = Get.arguments as String? ?? '';
+    if (poemUID.value.isNotEmpty) {
+      fetchPoem().then((_) => loadPoem());
+    }
   }
 
   Future<void> fetchPoem() async {
@@ -25,40 +34,55 @@ class EditorPageController extends GetxController {
         .doc(poemUID.value)
         .get();
     Map<String, dynamic>? data = doc.data();
-    poem.value = (Poem.fromJson(data!));
+    if (data != null) {
+      poem.value = Poem.fromJson(data);
+    }
   }
 
-  loadPoem() {
-    poemNameController.text =
-        poem.value!.poemName!.words!.map((word) => word.local).join(' ');
-    poemNameLatinController.text = poem.value!.poemName!.words!
-        .map((word) => word.latinTranslitaration)
-        .join(' ');
-    controller3.text = poem.value!.poetName ?? '';
-    controller4.text = poem.value!.recitationLinks!.join(' ');
-    controller7.text = poem.value!.tags!.join(' ');
+  void loadPoem() {
+    if (poem.value != null) {
+      poemNameController.text =
+          poem.value?.poemName?.words?.map((word) => word.local).join(' ') ??
+              '';
+      poemNameLatinController.text = poem.value?.poemName?.words
+              ?.map((word) => word.latinTranslitaration)
+              .join(' ') ??
+          '';
+      poetNameController.text = poem.value?.poetName ?? '';
+      poemYTlinkController.text = poem.value?.recitationLinks?.join(' ') ?? '';
+      poemTagsController.text = poem.value?.tags?.join(' ') ?? '';
+    }
   }
-
-  final TextEditingController poemNameController =
-      TextEditingController(text: '');
-  final TextEditingController poemNameLatinController =
-      TextEditingController(text: '');
-  final TextEditingController controller3 = TextEditingController(text: '');
-  final TextEditingController controller4 = TextEditingController(text: '');
-  final TextEditingController controller5 = TextEditingController(text: '');
-  final TextEditingController controller6 = TextEditingController(text: '');
-  final TextEditingController controller7 = TextEditingController(text: '');
 
   Future<void> savePoem() async {
+    poem.value ??= Poem(poemName: PoemName(words: [Word()]));
     poem.value?.poemName?.words?.first.local = poemNameController.text;
     poem.value?.poemName?.words?.first.latinTranslitaration =
         poemNameLatinController.text;
-    poem.value?.poetName = controller3.text;
-    poem.value!.recitationLinks = controller4.text.split(' ');
-    poem.value!.tags = controller7.text.split(' ');
+    poem.value?.poetName = poetNameController.text;
+    poem.value?.recitationLinks = poemYTlinkController.text.split(' ');
+    poem.value?.tags = poemTagsController.text.split(' ');
+    if (poemUID.value == '') {
+      await FirebaseFirestore.instance.collection('poems').add(
+            poem.value?.toJson() ?? {},
+          );
+    } else {
+      await FirebaseFirestore.instance
+          .collection('poems')
+          .doc(poemUID.value)
+          .set(
+            poem.value?.toJson() ?? {},
+          );
+    }
+  }
 
-    await FirebaseFirestore.instance.collection('poems').doc(poemUID.value).set(
-          poem.value?.toJson() ?? {},
-        );
+  @override
+  void onClose() {
+    poemNameController.dispose();
+    poemNameLatinController.dispose();
+    poetNameController.dispose();
+    poemYTlinkController.dispose();
+    poemTagsController.dispose();
+    super.onClose();
   }
 }
