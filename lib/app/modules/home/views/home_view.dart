@@ -74,6 +74,9 @@ class HomeView extends GetView<HomeController> {
                   },
                   child: const Text('Log in'),
                 ),
+                const SizedBox(
+                  width: 15,
+                ),
                 ElevatedButton(
                   onPressed: () {
                     Get.dialog(
@@ -91,7 +94,7 @@ class HomeView extends GetView<HomeController> {
                     controller.scaffoldKey.currentState?.openEndDrawer();
                   },
                   child: const Icon(
-                    Icons.cabin,
+                    Icons.view_sidebar,
                     size: 35,
                   ),
                 ),

@@ -27,15 +27,25 @@ class RegistrationModal extends StatelessWidget {
                   decoration: const InputDecoration(
                     hintText: "Name",
                     contentPadding: EdgeInsets.all(10),
+                    labelText: "Enter Name",
                   ),
+                  autofocus: true,
+                  autocorrect: false,
+                  autofillHints: const [AutofillHints.name],
+                  keyboardType: TextInputType.name,
                 ),
                 const SizedBox(height: 10),
                 TextField(
                   controller: controller.emailController,
                   decoration: const InputDecoration(
-                    hintText: "Email",
+                    hintText: "abc@email.com",
                     contentPadding: EdgeInsets.all(10),
+                    labelText: "Enter Email",
                   ),
+                  autofocus: true,
+                  autocorrect: false,
+                  autofillHints: const [AutofillHints.email],
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 10),
                 TextField(
@@ -43,7 +53,13 @@ class RegistrationModal extends StatelessWidget {
                   decoration: const InputDecoration(
                     hintText: "Password",
                     contentPadding: EdgeInsets.all(10),
+                    labelText: "Enter Password",
                   ),
+                  obscureText: true,
+                  autofocus: true,
+                  autocorrect: false,
+                  autofillHints: const [AutofillHints.password],
+                  keyboardType: TextInputType.visiblePassword,
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -103,7 +119,12 @@ class LoginModal extends StatelessWidget {
                   decoration: const InputDecoration(
                     hintText: "Email",
                     contentPadding: EdgeInsets.all(10),
+                    labelText: "Enter Email",
                   ),
+                  autofocus: true,
+                  autocorrect: false,
+                  autofillHints: const [AutofillHints.email],
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 10),
                 TextField(
@@ -111,8 +132,12 @@ class LoginModal extends StatelessWidget {
                   decoration: const InputDecoration(
                     hintText: "Password",
                     contentPadding: EdgeInsets.all(10),
+                    labelText: "Enter Password",
                   ),
                   obscureText: true,
+                  autocorrect: false,
+                  autofillHints: const [AutofillHints.password],
+                  keyboardType: TextInputType.visiblePassword,
                 ),
                 const SizedBox(height: 20),
                 Row(
