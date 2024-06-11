@@ -135,8 +135,9 @@ class HomeView extends GetView<HomeController> {
                         ),
                       ),
                       onTap: () {
-                        Get.toNamed(Routes.POEM_VIEW_PAGE,
-                            arguments: controller.poemUIDs[index]);
+                        Get.toNamed(Routes.POEM_VIEW_PAGE, parameters: {
+                          'poem_uid': controller.poemUIDs[index] ?? ''
+                        });
                       },
                     );
                   }),

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class Poem {
-  PoemName? poemName;
+  Sentence? poemName;
   String? poetName;
   List<String>? recitationLinks;
   Texts? texts;
@@ -21,7 +21,7 @@ class Poem {
   factory Poem.fromJson(Map<String, dynamic> json) => Poem(
         poemName: json["poem_name"] == null
             ? null
-            : PoemName.fromJson(json["poem_name"]),
+            : Sentence.fromJson(json["poem_name"]),
         poetName: json["poet_name"],
         recitationLinks: json["recitation_links"] == null
             ? []
@@ -43,19 +43,19 @@ class Poem {
       };
 }
 
-class PoemName {
+class Sentence {
   List<Word>? words;
 
-  PoemName({
+  Sentence({
     this.words,
   });
 
-  factory PoemName.fromRawJson(String str) =>
-      PoemName.fromJson(json.decode(str));
+  factory Sentence.fromRawJson(String str) =>
+      Sentence.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory PoemName.fromJson(Map<String, dynamic> json) => PoemName(
+  factory Sentence.fromJson(Map<String, dynamic> json) => Sentence(
         words: json["words"] == null
             ? []
             : List<Word>.from(json["words"]!.map((x) => Word.fromJson(x))),
@@ -94,7 +94,7 @@ class Word {
 
 class Texts {
   String? localLanguage;
-  List<PoemName>? sentences;
+  List<Sentence>? sentences;
 
   Texts({
     this.localLanguage,
@@ -109,8 +109,8 @@ class Texts {
         localLanguage: json["local_language"],
         sentences: json["sentences"] == null
             ? []
-            : List<PoemName>.from(
-                json["sentences"]!.map((x) => PoemName.fromJson(x))),
+            : List<Sentence>.from(
+                json["sentences"]!.map((x) => Sentence.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mushaira/app/modules/home/model/poem_model.dart';
+import 'package:mushaira/app/routes/app_pages.dart';
 
 class EditorPageController extends GetxController {
   Rx<Poem?> poem = Rx(null);
@@ -21,7 +22,7 @@ class EditorPageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    poemUID.value = Get.arguments as String? ?? '';
+    poemUID.value = Get.parameters['poem_uid'] ?? '';
     if (poemUID.value.isNotEmpty) {
       fetchPoem().then((_) => loadPoem());
     }
@@ -55,7 +56,7 @@ class EditorPageController extends GetxController {
   }
 
   Future<void> savePoem() async {
-    poem.value ??= Poem(poemName: PoemName(words: [Word()]));
+    poem.value ??= Poem(poemName: Sentence(words: [Word()]));
     poem.value?.poemName?.words?.first.local = poemNameController.text;
     poem.value?.poemName?.words?.first.latinTranslitaration =
         poemNameLatinController.text;
@@ -74,6 +75,7 @@ class EditorPageController extends GetxController {
             poem.value?.toJson() ?? {},
           );
     }
+    Get.toNamed(Routes.HOME);
   }
 
   @override
