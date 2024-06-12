@@ -3,10 +3,7 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mushaira/app/modules/home/model/userdata_model.dart';
-
-class FirestoreServices {
-  static saveUser(String name, email, uid) async {}
-}
+import '../model/poem_model.dart';
 
 class HomeController extends GetxController {
   Rx<UserData?> userData = Rx(null);
@@ -20,24 +17,43 @@ class HomeController extends GetxController {
   Rx<User?> user = Rx(null);
   RxnString username = RxnString();
 
+  RxList<Poem?> poem = RxList.empty(growable: true);
+  RxList<String?> poemUIDs = RxList.empty(growable: true);
+
   @override
   void onInit() {
+    fetchPoems();
     FirebaseAuth.instance.authStateChanges().listen((User? u) {
       user.value = u;
       getUserName(u);
     });
+
     super.onInit();
+  }
+
+  Future<void> fetchPoems() async {
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection('poems').get();
+    poem.clear();
+    for (QueryDocumentSnapshot<Map<String, dynamic>> doc in snapshot.docs) {
+      Map<String, dynamic> data = doc.data();
+      poemUIDs.add(doc.id);
+      poem.add(Poem.fromJson(data));
+    }
   }
 
   Future<void> getUserName(User? user) async {
     if (user == null) {
+      userData = Rx(null);
       return;
     }
-    final data = await FirebaseFirestore.instance
+    final DocumentSnapshot<Map<String, dynamic>> data = await FirebaseFirestore
+        .instance
         .collection('users')
         .doc(user.uid)
         .get();
-    username.value = data.data()?['name'];
+    final Map<String, dynamic> json = data.data() ?? {};
+    userData.value = UserData.fromJson(json);
   }
 
   void register() {
@@ -55,7 +71,7 @@ class HomeController extends GetxController {
           favouritePoemsIds: null,
         );
         saveUser(
-          cred.user!.uid,
+          cred.user?.uid,
         );
         Get.back();
       },
@@ -68,8 +84,7 @@ class HomeController extends GetxController {
         email: logemailController.text,
         password: logpassController.text,
       );
-      // Get.offAllNamed(Routes.HOME);
-      Get.snackbar('Contugralations!', 'Wellcome');
+      Get.back();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         Get.snackbar('WEAK!', 'Password Provided is too weak');
@@ -83,7 +98,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> saveUser(String uid) async {
+  Future<void> saveUser(String? uid) async {
     await FirebaseFirestore.instance.collection('users').doc(uid).set(
           userData.value?.toJson() ?? {},
         );
