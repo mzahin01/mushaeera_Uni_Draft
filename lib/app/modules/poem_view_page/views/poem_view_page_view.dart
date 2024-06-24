@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mushaira/app/modules/home/controllers/home_controller.dart';
+import 'package:mushaira/app/modules/home/model/poem_model.dart';
 import 'package:mushaira/app/routes/app_pages.dart';
-import '../../home/model/poem_model.dart';
+import 'package:share_plus/share_plus.dart';
 import '../controllers/poem_view_page_controller.dart';
 
 class PoemViewPageView extends GetView<PoemViewPageController> {
   const PoemViewPageView({super.key});
   @override
   Widget build(BuildContext context) {
+    Get.put(HomeController());
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -16,7 +19,7 @@ class PoemViewPageView extends GetView<PoemViewPageController> {
             parameters: {'poem_uid': controller.poemUID.value},
           );
         },
-        child: const Icon(Icons.logout),
+        child: const Icon(Icons.edit),
       ),
       appBar: AppBar(
         title: Obx(() => Text(controller.poem.value?.poetName ?? 'Poem')),
@@ -26,6 +29,11 @@ class PoemViewPageView extends GetView<PoemViewPageController> {
           return const Center(child: CircularProgressIndicator());
         } else {
           Poem? poem = controller.poem.value;
+          bool isFavorited = controller.isFavorite();
+
+          // Convert the Poem object to a string representation
+          String poemText = _poemToString(poem);
+
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -46,6 +54,30 @@ class PoemViewPageView extends GetView<PoemViewPageController> {
                       poem?.poetName ?? '',
                       style: const TextStyle(
                           fontSize: 20, fontStyle: FontStyle.italic),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            await controller.toggleFavorite();
+                          },
+                          icon: Icon(
+                            isFavorited
+                                ? Icons.favorite
+                                : Icons.favorite_outline,
+                            color: isFavorited ? Colors.red : null,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        IconButton(
+                          onPressed: () {
+                            Share.share(poemText);
+                          },
+                          icon: const Icon(Icons.share),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     ...?poem?.texts?.sentences?.map((sentence) {
@@ -112,5 +144,20 @@ class PoemViewPageView extends GetView<PoemViewPageController> {
         }
       }),
     );
+  }
+
+  // Method to convert Poem object to a string representation
+  String _poemToString(Poem? poem) {
+    if (poem == null) return '';
+    String poemName =
+        poem.poemName?.words?.map((word) => word.local).join(' ') ?? '';
+    String poetName = poem.poetName ?? '';
+    String text = poem.texts?.sentences
+            ?.map((sentence) =>
+                sentence.words?.map((word) => word.local).join(' ') ?? '')
+            .join('\n') ??
+        '';
+    String tags = poem.tags?.join(', ') ?? '';
+    return 'Poem: $poemName\n\nBy: $poetName\n\n$text\n\nTags: $tags';
   }
 }

@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:mushaira/app/modules/home/controllers/home_controller.dart';
 import 'package:mushaira/app/modules/home/model/poem_model.dart';
 
 class PoemViewPageController extends GetxController {
   Rx<Poem?> poem = Rx(null);
   RxString poemUID = ''.obs;
+  final HomeController homeController = Get.find<HomeController>();
 
   @override
   void onInit() {
@@ -20,6 +22,14 @@ class PoemViewPageController extends GetxController {
         .doc(poemUID.value)
         .get();
     Map<String, dynamic>? data = doc.data();
-    poem.value = (Poem.fromJson(data ?? {}));
+    poem.value = Poem.fromJson(data ?? {});
+  }
+
+  Future<void> toggleFavorite() async {
+    await homeController.toggleFavorite(poemUID.value);
+  }
+
+  bool isFavorite() {
+    return homeController.favoritePoemIds.contains(poemUID.value);
   }
 }

@@ -12,7 +12,7 @@ Future<void> main() async {
   runApp(
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Application",
+      title: "Mushaeera",
       initialRoute: AppPages.initial,
       getPages: AppPages.routes,
     ),

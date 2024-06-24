@@ -6,6 +6,7 @@ class Poem {
   List<String>? recitationLinks;
   Texts? texts;
   List<String>? tags;
+  String? poemUID;
 
   Poem({
     this.poemName,
@@ -13,6 +14,7 @@ class Poem {
     this.recitationLinks,
     this.texts,
     this.tags,
+    this.poemUID,
   });
 
   factory Poem.fromRawJson(String str) => Poem.fromJson(json.decode(str));

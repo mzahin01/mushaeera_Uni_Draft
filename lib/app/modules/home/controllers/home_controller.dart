@@ -19,7 +19,7 @@ class HomeController extends GetxController {
 
   RxList<Poem?> poem = RxList.empty(growable: true);
   RxList<String?> poemUIDs = RxList.empty(growable: true);
-
+  RxSet<String> favoritePoemIds = <String>{}.obs;
   @override
   void onInit() {
     fetchPoems();
@@ -44,7 +44,7 @@ class HomeController extends GetxController {
 
   Future<void> getUserName(User? user) async {
     if (user == null) {
-      userData = Rx(null);
+      userData.value = null;
       return;
     }
     final DocumentSnapshot<Map<String, dynamic>> data = await FirebaseFirestore
@@ -54,6 +54,9 @@ class HomeController extends GetxController {
         .get();
     final Map<String, dynamic> json = data.data() ?? {};
     userData.value = UserData.fromJson(json);
+
+    favoritePoemIds.clear();
+    favoritePoemIds.addAll(userData.value?.favouritePoemsIds ?? []);
   }
 
   void register() {
@@ -68,11 +71,9 @@ class HomeController extends GetxController {
           name: nameController.text,
           email: emailController.text,
           role: 'User',
-          favouritePoemsIds: null,
+          favouritePoemsIds: [],
         );
-        saveUser(
-          cred.user?.uid,
-        );
+        saveUser(cred.user?.uid);
         Get.back();
       },
     );
@@ -94,7 +95,7 @@ class HomeController extends GetxController {
         Get.snackbar('WRONG!', 'Email and Password does not match');
       }
     } catch (e) {
-      Get.snackbar('WEAK!', e.toString());
+      Get.snackbar('Authentication error!', e.toString());
     }
   }
 
@@ -102,5 +103,24 @@ class HomeController extends GetxController {
     await FirebaseFirestore.instance.collection('users').doc(uid).set(
           userData.value?.toJson() ?? {},
         );
+  }
+
+  Future<void> toggleFavorite(String poemId) async {
+    if (user.value != null) {
+      DocumentReference userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(user.value!.uid);
+      DocumentSnapshot userDoc = await userDocRef.get();
+      List<dynamic> favoritePoemIdsList = userDoc['FavouritePoemsIds'] ?? [];
+
+      if (favoritePoemIdsList.contains(poemId)) {
+        favoritePoemIdsList.remove(poemId);
+        favoritePoemIds.remove(poemId);
+      } else {
+        favoritePoemIdsList.add(poemId);
+        favoritePoemIds.add(poemId);
+      }
+
+      await userDocRef.update({'FavouritePoemsIds': favoritePoemIdsList});
+    }
   }
 }

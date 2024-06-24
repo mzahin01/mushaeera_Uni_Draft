@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mushaira/app/modules/home/modals_reg_log/modal.dart';
 import 'package:mushaira/app/modules/home/model/poem_model.dart';
+import 'package:mushaira/app/modules/home/widgets/widget_base.dart';
 import 'package:mushaira/app/routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 import '../widgets/drawer.dart';
-import '../widgets/widget_base.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -85,12 +85,15 @@ class HomeView extends GetView<HomeController> {
                       controller.userData.value?.name ?? "",
                       style: const TextStyle(fontSize: 15),
                     ),
+                    const SizedBox(
+                      width: 15,
+                    ),
                     GestureDetector(
                       onTap: () {
                         controller.scaffoldKey.currentState?.openEndDrawer();
                       },
                       child: const Icon(
-                        Icons.cabin,
+                        Icons.list,
                         size: 35,
                       ),
                     ),
@@ -101,59 +104,59 @@ class HomeView extends GetView<HomeController> {
                 ],
               ),
             ),
-            // Container(
-            //   height: 200,
-            //   width: 200,
-            //   color: Colors.amber,
-            // ),
             Expanded(
               child: ListView.builder(
                   itemCount: controller.poem.length,
                   itemBuilder: (context, index) {
                     Poem? localPoem = controller.poem[index];
-                    return GestureDetector(
-                      child: Container(
-                        // height: 200,
-                        margin: const EdgeInsets.all(5),
-                        width: Get.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 118, 208, 249),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: ListTile(
-                          title: Text(
-                            localPoem?.poemName?.words
-                                    ?.map((word) => word.local)
-                                    .join(' ') ??
-                                '--',
-                            style: const TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
+                    String poemId = controller.poemUIDs[index] ?? '';
+
+                    return Obx(() {
+                      bool isFavorited =
+                          controller.favoritePoemIds.contains(poemId);
+
+                      return GestureDetector(
+                        child: Container(
+                          margin: const EdgeInsets.all(5),
+                          width: Get.width,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 118, 208, 249),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                          subtitle: Text(
-                            localPoem?.poetName ?? '--',
+                          child: ListTile(
+                            title: Text(
+                              localPoem?.poemName?.words
+                                      ?.map((word) => word.local)
+                                      .join(' ') ??
+                                  '--',
+                              style: const TextStyle(
+                                  fontSize: 30, fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text(
+                              localPoem?.poetName ?? '--',
+                            ),
+                            trailing: IconButton(
+                              onPressed: () async {
+                                await controller.toggleFavorite(poemId);
+                              },
+                              icon: Icon(
+                                isFavorited
+                                    ? Icons.favorite
+                                    : Icons.favorite_outline,
+                                color: isFavorited ? Colors.red : null,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      onTap: () {
-                        Get.toNamed(Routes.POEM_VIEW_PAGE, parameters: {
-                          'poem_uid': controller.poemUIDs[index] ?? ''
-                        });
-                      },
-                    );
+                        onTap: () {
+                          Get.toNamed(Routes.POEM_VIEW_PAGE, parameters: {
+                            'poem_uid': poemId,
+                          });
+                        },
+                      );
+                    });
                   }),
             )
-            // Container(
-            //   width: 300,
-            //   height: 300,
-            //   decoration: BoxDecoration(
-            //     color: Colors.grey[200],
-            //     borderRadius: BorderRadius.circular(15),
-            //   ),
-            //   child: const RiveAnimation.asset(
-            //     'assets/animation.riv',
-            //     fit: BoxFit.cover,
-            //   ),
-            // ),
           ],
         ),
       );
