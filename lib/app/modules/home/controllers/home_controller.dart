@@ -27,7 +27,6 @@ class HomeController extends GetxController {
       user.value = u;
       getUserName(u);
     });
-
     super.onInit();
   }
 
@@ -40,6 +39,7 @@ class HomeController extends GetxController {
       poemUIDs.add(doc.id);
       poem.add(Poem.fromJson(data));
     }
+    print(poem.length);
   }
 
   Future<void> getUserName(User? user) async {

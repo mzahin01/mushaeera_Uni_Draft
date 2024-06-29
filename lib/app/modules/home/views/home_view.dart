@@ -106,56 +106,54 @@ class HomeView extends GetView<HomeController> {
             ),
             Expanded(
               child: ListView.builder(
-                  itemCount: controller.poem.length,
-                  itemBuilder: (context, index) {
-                    Poem? localPoem = controller.poem[index];
-                    String poemId = controller.poemUIDs[index] ?? '';
-
-                    return Obx(() {
-                      bool isFavorited =
-                          controller.favoritePoemIds.contains(poemId);
-
-                      return GestureDetector(
-                        child: Container(
-                          margin: const EdgeInsets.all(5),
-                          width: Get.width,
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 118, 208, 249),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: ListTile(
-                            title: Text(
-                              localPoem?.poemName?.words
-                                      ?.map((word) => word.local)
-                                      .join(' ') ??
-                                  '--',
-                              style: const TextStyle(
-                                  fontSize: 30, fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text(
-                              localPoem?.poetName ?? '--',
-                            ),
-                            trailing: IconButton(
-                              onPressed: () async {
-                                await controller.toggleFavorite(poemId);
-                              },
-                              icon: Icon(
-                                isFavorited
-                                    ? Icons.favorite
-                                    : Icons.favorite_outline,
-                                color: isFavorited ? Colors.red : null,
-                              ),
-                            ),
+                itemCount: controller.poem.length,
+                itemBuilder: (context, index) {
+                  Poem? localPoem = controller.poem[index];
+                  String poemId = controller.poemUIDs[index] ?? '';
+                  bool isFavorited =
+                      controller.favoritePoemIds.contains(poemId);
+                  return GestureDetector(
+                    child: Container(
+                      margin: const EdgeInsets.all(5),
+                      width: Get.width,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 118, 208, 249),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: ListTile(
+                        title: Text(
+                          localPoem?.poemName?.words
+                                  ?.map((word) => word.local)
+                                  .join(' ') ??
+                              '--',
+                          style: const TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          localPoem?.poetName ?? '--',
+                        ),
+                        trailing: IconButton(
+                          onPressed: () async {
+                            await controller.toggleFavorite(poemId);
+                          },
+                          icon: Icon(
+                            isFavorited
+                                ? Icons.favorite
+                                : Icons.favorite_outline,
+                            color: isFavorited ? Colors.red : Colors.white,
                           ),
                         ),
-                        onTap: () {
-                          Get.toNamed(Routes.POEM_VIEW_PAGE, parameters: {
-                            'poem_uid': poemId,
-                          });
-                        },
+                      ),
+                    ),
+                    onTap: () {
+                      Get.toNamed(
+                        Routes.POEM_VIEW_PAGE,
+                        parameters: {'poem_uid': poemId},
                       );
-                    });
-                  }),
+                    },
+                  );
+                },
+              ),
             )
           ],
         ),
