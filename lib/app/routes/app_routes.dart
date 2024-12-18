@@ -8,6 +8,8 @@ abstract class Routes {
   static const HOME = _Paths.HOME;
   static const EDITOR_PAGE = _Paths.EDITOR_PAGE;
   static const POEM_VIEW_PAGE = _Paths.POEM_VIEW_PAGE;
+  static const FAV_POEMS = _Paths.FAV_POEMS;
+  static const TEST_PAGE = _Paths.TEST_PAGE;
 }
 
 abstract class _Paths {
@@ -15,4 +17,6 @@ abstract class _Paths {
   static const HOME = '/home';
   static const EDITOR_PAGE = '/editor-page';
   static const POEM_VIEW_PAGE = '/poem-view-page';
+  static const FAV_POEMS = '/fav-poems';
+  static const TEST_PAGE = '/test-page';
 }

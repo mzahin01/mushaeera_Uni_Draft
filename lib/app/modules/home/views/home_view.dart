@@ -132,17 +132,20 @@ class HomeView extends GetView<HomeController> {
                         subtitle: Text(
                           localPoem?.poetName ?? '--',
                         ),
-                        trailing: IconButton(
-                          onPressed: () async {
-                            await controller.toggleFavorite(poemId);
-                          },
-                          icon: Icon(
-                            isFavorited
-                                ? Icons.favorite
-                                : Icons.favorite_outline,
-                            color: isFavorited ? Colors.red : Colors.white,
-                          ),
-                        ),
+                        trailing: controller.user.value != null
+                            ? IconButton(
+                                onPressed: () async {
+                                  await controller.toggleFavorite(poemId);
+                                },
+                                icon: Icon(
+                                  isFavorited
+                                      ? Icons.favorite
+                                      : Icons.favorite_outline,
+                                  color:
+                                      isFavorited ? Colors.red : Colors.white,
+                                ),
+                              )
+                            : null,
                       ),
                     ),
                     onTap: () {
