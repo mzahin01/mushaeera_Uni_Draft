@@ -20,7 +20,7 @@ class BottomSheetHeader extends StatelessWidget {
     return BottomSheetHeader(
       child: CircleContainer(
         size: 64,
-        color: SGColors.secondaryRed.withOpacity(0.1),
+        color: SGColors.secondaryRed.withAlpha(21),
         child: Icon(
           icon,
           size: iconSize,
